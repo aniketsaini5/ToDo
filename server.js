@@ -23,10 +23,10 @@ let todos = [
     { id: 3, todoval: "Play Game" }
 ];
 
-// Route to serve the HTML page
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+// // Route to serve the HTML page
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
 
 // Route to get all todos
 app.get('/todos', (req, res) => {
