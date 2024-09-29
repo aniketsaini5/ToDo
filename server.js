@@ -1,13 +1,14 @@
 const express = require('express');
 const path = require('path');
-
 const cors = require('cors');
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-app.use(cors()); 
-
-app.use(cors({ origin: 'https://my-todo-s.vercel.app/' }));
+// Middleware for CORS
+app.use(cors({
+    origin: ['https://my-todo-s.vercel.app', 'http://localhost:3000']
+}));
 
 // Middleware to serve static files from the "public" folder
 app.use(express.static('public'));
@@ -34,9 +35,14 @@ app.get('/todos', (req, res) => {
 
 // Route to add a new todo (Create)
 app.post('/additem', (req, res) => {
+    const newTodoVal = req.body.todoval;
+    if (!newTodoVal || typeof newTodoVal !== 'string') {
+        return res.status(400).send({ message: "Invalid input" });
+    }
+
     const newTodo = {
         id: todos.length + 1,
-        todoval: req.body.todoval
+        todoval: newTodoVal
     };
     todos.push(newTodo);
     res.status(201).send(todos);
@@ -52,11 +58,16 @@ app.delete('/deleteitem/:id', (req, res) => {
 // Route to update a todo (Update)
 app.put('/updateitem/:id', (req, res) => {
     const todoId = parseInt(req.params.id);
-    const updatedTodo = req.body.todoval;
+    const updatedTodoVal = req.body.todoval;
+
+    if (!updatedTodoVal || typeof updatedTodoVal !== 'string') {
+        return res.status(400).send({ message: "Invalid input" });
+    }
+
     const todoIndex = todos.findIndex(todo => todo.id === todoId);
     
     if (todoIndex !== -1) {
-        todos[todoIndex].todoval = updatedTodo;
+        todos[todoIndex].todoval = updatedTodoVal;
         res.send({ message: "Todo updated successfully", todos });
     } else {
         res.status(404).send({ message: "Todo not found" });
