@@ -1,6 +1,3 @@
-// Define the base URL for your local environment
-const BASE_URL = 'https://localhost:3000';
-
 // Add event listener to the "Add Task" button
 document.getElementById('addTaskButton').addEventListener('click', addTask);
 
@@ -11,7 +8,7 @@ function addTask(event) {
     const todoval = inputTask.value.trim(); // Get the task value
 
     if (todoval) {
-        axios.post(`${BASE_URL}/additem`, { todoval }) // Use full path for the local environment
+        axios.post('/additem', { todoval }) // Use relative path for the deployed environment
             .then(response => {
                 renderTodos(response.data); // Render the updated todo list
                 inputTask.value = ''; // Clear the input field
@@ -27,7 +24,7 @@ function addTask(event) {
 
 // Load all todos on page load
 window.onload = function() {
-    axios.get(`${BASE_URL}/todos`) // Use full path for the local environment
+    axios.get('/todos') // Use relative path for the deployed environment
         .then(response => {
             renderTodos(response.data); // Render the todo list
         })
@@ -57,7 +54,7 @@ function renderTodos(todos) {
 
 // Delete todo function
 function deleteTask(id) {
-    axios.delete(`${BASE_URL}/deleteitem/${id}`) // Use full path for the local environment
+    axios.delete(`/deleteitem/${id}`) // Use relative path for the deployed environment
         .then(response => {
             renderTodos(response.data.todos); // Render the updated todo list
             alert(response.data.message); // Notify user of successful deletion
@@ -72,7 +69,7 @@ function deleteTask(id) {
 function editTask(id, oldValue) {
     const newTask = prompt("Update the task", oldValue); // Prompt user for new task value
     if (newTask && newTask.trim() !== '') {
-        axios.put(`${BASE_URL}/updateitem/${id}`, { todoval: newTask }) // Use full path for the local environment
+        axios.put(`/updateitem/${id}`, { todoval: newTask }) // Use relative path for the deployed environment
             .then(response => {
                 alert(response.data.message); // Notify user of successful update
                 renderTodos(response.data.todos); // Render the updated todo list
