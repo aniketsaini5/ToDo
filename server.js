@@ -24,9 +24,9 @@ let todos = [
 ];
 
 // Route to serve the HTML page
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'public', 'index.html'));
-// });
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // // Route to get all todos
 app.get('/todos', (req, res) => {
