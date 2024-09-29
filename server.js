@@ -6,6 +6,9 @@ const app = express();
 const port = 3000;
 
 app.use(cors()); 
+
+app.use(cors({ origin: 'https://my-todo-s.vercel.app/' }));
+
 // Middleware to serve static files from the "public" folder
 app.use(express.static('public'));
 
