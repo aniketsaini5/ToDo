@@ -23,16 +23,16 @@ function addTask(event) {
 }
 
 // Load all todos on page load
-window.onload = function() {
-    axios.get('/todos') // Use relative path for the deployed environment
-        .then(response => {
-            renderTodos(response.data); // Render the todo list
-        })
-        .catch(error => {
-            console.error("Error fetching tasks:", error);
-            alert("Failed to fetch tasks. Please try again."); // User feedback on error
-        });
-};
+// window.onload = function() {
+//     axios.get('/todos') // Use relative path for the deployed environment
+//         .then(response => {
+//             renderTodos(response.data); // Render the todo list
+//         })
+//         .catch(error => {
+//             console.error("Error fetching tasks:", error);
+//             alert("Failed to fetch tasks. Please try again."); // User feedback on error
+//         });
+// };
 
 // Function to render todos
 function renderTodos(todos) {
