@@ -6,7 +6,8 @@ const port = process.env.PORT || 3000;
 
 // Middleware for CORS
 app.use(cors({
-    origin: ['https://my-todo-s.vercel.app', 'http://localhost:3000']
+    origin: ['https://my-todo-s.vercel.app', 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
 }));
 
 // Middleware to serve static files from the "public" folder
