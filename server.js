@@ -17,11 +17,7 @@ app.use(express.static('public'));
 app.use(express.json());
 
 // Initialize an array to store todos
-let todos = [
-    { id: 1, todoval: "Buy Milk" },
-    { id: 2, todoval: "Complete the project" },
-    { id: 3, todoval: "Play Game" }
-];
+let todos = [];
 
 // Route to get all todos
 app.get('/todos', (req, res) => {
