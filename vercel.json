@@ -1,11 +1,5 @@
 {
     "version": 2,
-    "rewrites": [
-        {
-            "source": "/(.*)"
-        }
-    ],
-
     "builds": [
         {
             "src": "server.js",
@@ -16,10 +10,9 @@
         {
             "src": "/(.*)",
             "dest": "server.js"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/public/$1" 
         }
-    ]
+    ],
+    "env": {
+        "PORT": "3000"
+    }
 }
