@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// // Route to get all todos
+// Route to get all todos
 app.get('/todos', (req, res) => {
     res.send(todos);
 });
