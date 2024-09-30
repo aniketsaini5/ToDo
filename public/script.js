@@ -44,8 +44,8 @@ function renderTodos(todos) {
         li.innerHTML = `
         <span>${todo.todoval}</span>
         <div>
-            <button class="edit-btn" onclick="editTask(${todo.id}, '${todo.todoval}')">✏️</button>
-            <button class="del-btn" onclick="deleteTask(${todo.id})">❌</button>
+            <button class="edit-btn" onclick="editTask(${todo.id}, '${todo.todoval}')">Edit</button>
+            <button class="del-btn" onclick="deleteTask(${todo.id})">Delete</button>
         </div>
     `;
         ul.appendChild(li); // Append the new list item to the ul
@@ -57,7 +57,7 @@ function deleteTask(id) {
     axios.delete(`/deleteitem/${id}`) // Use relative path for the deployed environment
         .then(response => {
             renderTodos(response.data.todos); // Render the updated todo list
-            alert(response.data.message); // Notify user of successful deletion
+            // alert(response.data.message); // Notify user of successful deletion
         })
         .catch(error => {
             console.error("Error deleting task:", error);
@@ -71,7 +71,7 @@ function editTask(id, oldValue) {
     if (newTask && newTask.trim() !== '') {
         axios.put(`/updateitem/${id}`, { todoval: newTask }) // Use relative path for the deployed environment
             .then(response => {
-                alert(response.data.message); // Notify user of successful update
+                // alert(response.data.message); // Notify user of successful update
                 renderTodos(response.data.todos); // Render the updated todo list
             })
             .catch(error => {
