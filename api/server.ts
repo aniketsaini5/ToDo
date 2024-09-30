@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,7 +33,7 @@ app.post('/additem', (req, res) => {
     }
 
     const newTodo = {
-        id: todos.length + 1,
+        id: uuidv4(), // Use UUID for unique IDs
         todoval: newTodoVal
     };
     todos.push(newTodo);
@@ -41,14 +42,14 @@ app.post('/additem', (req, res) => {
 
 // Route to delete a todo (Delete)
 app.delete('/deleteitem/:id', (req, res) => {
-    const todoId = parseInt(req.params.id);
+    const todoId = req.params.id;
     todos = todos.filter(todo => todo.id !== todoId);
     res.json({ message: "Todo deleted successfully", todos });
 });
 
 // Route to update a todo (Update)
 app.put('/updateitem/:id', (req, res) => {
-    const todoId = parseInt(req.params.id);
+    const todoId = req.params.id;
     const updatedTodoVal = req.body.todoval;
 
     if (!updatedTodoVal || typeof updatedTodoVal !== 'string') {
@@ -65,6 +66,11 @@ app.put('/updateitem/:id', (req, res) => {
     }
 });
 
+// 404 Route handler
+app.use((req, res, next) => {
+    res.status(404).json({ message: "Route not found" });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -76,4 +82,4 @@ app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
-module.exports  = app;
+module.exports = app;
