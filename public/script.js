@@ -1,82 +1,96 @@
-// Add event listener to the "Add Task" button
 document.getElementById('addTaskButton').addEventListener('click', addTask);
 
-// Function to add a new task
 function addTask(event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
     const inputTask = document.getElementById('inputTask');
-    const todoval = inputTask.value.trim(); // Get the task value
+    const todoval = inputTask.value.trim();
 
     if (todoval) {
-        axios.post('/additem', { todoval }) // Use relative path for the deployed environment
+        axios.post('/additem', { todoval })
             .then(response => {
-                renderTodos(response.data); // Render the updated todo list
-                inputTask.value = ''; // Clear the input field
+                renderTodos(response.data);
+                inputTask.value = '';
             })
             .catch(error => {
                 console.error("Error adding task:", error);
-                alert("Failed to add task. Please try again."); // User feedback on error
+                alert("Failed to add task. Please try again.");
             });
     } else {
-        alert('Please enter a task!'); // Alert if input is empty
+        alert('Please enter a task!');
     }
 }
 
-// Load all todos on page load
-// window.onload = function() {
-//     axios.get('/todos') // Use relative path for the deployed environment
-//         .then(response => {
-//             renderTodos(response.data); // Render the todo list
-//         })
-//         .catch(error => {
-//             console.error("Error fetching tasks:", error);
-//             alert("Failed to fetch tasks. Please try again."); // User feedback on error
-//         });
-// };
+//Load all todos on page load
+window.onload = function () {
+    axios.get('/todos')
+        .then(response => {
+            renderTodos(response.data);
+        })
+        .catch(error => {
+            console.error("Error fetching tasks:", error);
+            alert("Failed to fetch tasks. Please try again.");
+        });
+};
 
-// Function to render todos
 function renderTodos(todos) {
     const ul = document.getElementById('list');
-    ul.innerHTML = ''; // Clear existing list
+    ul.innerHTML = '';
 
     todos.forEach(todo => {
         const li = document.createElement('li');
         li.innerHTML = `
-        <span>${todo.todoval}</span>
-        <div>
-            <button class="edit-btn" onclick="editTask(${todo.id}, '${todo.todoval}')">Edit</button>
-            <button class="del-btn" onclick="deleteTask(${todo.id})">Delete</button>
-        </div>
-    `;
-        ul.appendChild(li); // Append the new list item to the ul
+            <div class="todo-content">
+                <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onclick="toggleComplete(${todo.id})">
+                <span class="${todo.completed ? 'completed' : ''}">${todo.todoval}</span>
+            </div>
+            <div class="buttons">
+                <button class="edit-btn" onclick="editTask(${todo.id}, '${todo.todoval}')">✎</button>
+                <button class="del-btn" onclick="deleteTask(${todo.id})">✕</button>
+            </div>
+        `;
+        ul.appendChild(li);
     });
 }
 
-// Delete todo function
+
+function toggleComplete(id) {
+    // Get the checkbox and determine if it's checked
+    const checkbox = document.querySelector(`input[type="checkbox"][onclick="toggleComplete(${id})"]`);
+    const completed = checkbox.checked;
+
+    // Find the corresponding <span> element (the sibling of the checkbox)
+    const todoItem = checkbox.nextElementSibling;
+
+    // Add or remove the 'completed' class based on checkbox state
+    if (completed) {
+        todoItem.classList.add('completed');
+    } else {
+        todoItem.classList.remove('completed');
+    }
+}
+
+
 function deleteTask(id) {
-    axios.delete(`/deleteitem/${id}`) // Use relative path for the deployed environment
+    axios.delete(`/deleteitem/${id}`)
         .then(response => {
-            renderTodos(response.data.todos); // Render the updated todo list
-            // alert(response.data.message); // Notify user of successful deletion
+            renderTodos(response.data.todos);
         })
         .catch(error => {
             console.error("Error deleting task:", error);
-            alert("Failed to delete task. Please try again."); // User feedback on error
+            alert("Failed to delete task. Please try again.");
         });
 }
 
-// Edit task function
 function editTask(id, oldValue) {
-    const newTask = prompt("Update the task", oldValue); // Prompt user for new task value
+    const newTask = prompt("Update the task", oldValue);
     if (newTask && newTask.trim() !== '') {
-        axios.put(`/updateitem/${id}`, { todoval: newTask }) // Use relative path for the deployed environment
+        axios.put(`/updateitem/${id}`, { todoval: newTask })
             .then(response => {
-                // alert(response.data.message); // Notify user of successful update
-                renderTodos(response.data.todos); // Render the updated todo list
+                renderTodos(response.data.todos);
             })
             .catch(error => {
                 console.error("Error updating task:", error);
-                alert("Failed to update task. Please try again."); // User feedback on error
+                alert("Failed to update task. Please try again.");
             });
     }
 }
